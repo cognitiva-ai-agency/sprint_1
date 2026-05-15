@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sprint 1 · Reporte para Socios — Goopcar</title>
+<style>
+  :root {
+    --navy: #0B2545;
+    --navy-2: #13315C;
+    --accent: #1B3A6B;
+    --slate: #3E5C76;
+    --muted: #6B7785;
+    --light: #EEF2F7;
+    --border: #D9E1EC;
+    --bg: #F6F8FB;
+    --white: #FFFFFF;
+    --green: #1E7F4E;
+    --green-bg: #E6F4EC;
+    --amber: #B8860B;
+    --amber-bg: #FFF7E6;
+    --red: #B91C1C;
+    --red-bg: #FEE2E2;
+    --shadow: 0 2px 8px rgba(11,37,69,0.06);
+    --shadow-lg: 0 10px 30px rgba(11,37,69,0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif;
+    color: #1F2937;
+    background: var(--bg);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--navy-2); }
+
+  /* ---------- HEADER ---------- */
+  header.hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--accent) 70%, #1F4E8A 100%);
+    color: white;
+    padding: 56px 0 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  header.hero::before {
+    content: "";
+    position: absolute; top: 0; right: 0;
+    width: 50%; height: 100%;
+    background: radial-gradient(circle at 70% 30%, rgba(255,255,255,0.07), transparent 60%);
+    pointer-events: none;
+  }
+  .container {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    opacity: 0.75;
+    margin-bottom: 12px;
+  }
+  h1.hero-title {
+    font-size: 42px;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .hero-sub {
+    font-size: 18px;
+    color: #CBD5E1;
+    max-width: 720px;
+    margin-bottom: 26px;
+  }
+  .meta-row {
+    display: flex; flex-wrap: wrap; gap: 18px 32px;
+    margin-top: 18px;
+    font-size: 14px;
+    color: #BBC8D8;
+  }
+  .meta-row b { color: white; font-weight: 600; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(30, 127, 78, 0.18);
+    border: 1px solid rgba(78, 200, 132, 0.45);
+    color: #A8E5C2;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 18px;
+  }
+  .badge .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #4EC884;
+    box-shadow: 0 0 0 0 rgba(78,200,132,0.7);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(78,200,132,0.6); }
+    70% { box-shadow: 0 0 0 10px rgba(78,200,132,0); }
+    100% { box-shadow: 0 0 0 0 rgba(78,200,132,0); }
+  }
+
+  /* ---------- KPIs ---------- */
+  .kpi-row {
+    max-width: 1180px;
+    margin: -50px auto 36px;
+    padding: 0 32px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .kpi {
+    background: white;
+    border-radius: 14px;
+    padding: 22px 22px 20px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .kpi .label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .kpi .value {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .kpi .unit { font-size: 16px; font-weight: 600; color: var(--slate); }
+  .kpi .sub  { font-size: 12.5px; color: var(--muted); }
+  .kpi.accent { border-top: 4px solid var(--green); }
+  .kpi.warn   { border-top: 4px solid var(--amber); }
+
+  /* ---------- TABS ---------- */
+  nav.tabs {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(246,248,251,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 28px;
+  }
+  .tabs-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+  }
+  .tab-btn {
+    border: none;
+    background: transparent;
+    padding: 16px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--slate);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+  }
+  .tab-btn:hover { color: var(--navy); }
+  .tab-btn.active {
+    color: var(--navy);
+    border-bottom-color: var(--navy);
+  }
+
+  /* ---------- SECTIONS ---------- */
+  main { padding-bottom: 80px; }
+  section.panel { display: none; }
+  section.panel.active { display: block; animation: fadeIn 0.25s ease; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  h2.section-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+    letter-spacing: -0.2px;
+  }
+  .section-sub {
+    font-size: 14.5px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    max-width: 780px;
+  }
+
+  /* cards */
+  .card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: var(--shadow);
+  }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+  .feat-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: var(--shadow);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    cursor: pointer;
+    position: relative;
+  }
+  .feat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: #BBC8D8;
+  }
+  .feat-card .icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: var(--light);
+    color: var(--navy-2);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px;
+    font-size: 22px;
+  }
+  .feat-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .feat-card p {
+    font-size: 13.5px;
+    color: var(--slate);
+    line-height: 1.55;
+  }
+  .feat-card .pill {
+    position: absolute;
+    top: 18px; right: 18px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--green);
+    background: var(--green-bg);
+    padding: 4px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.5px;
+  }
+  .feat-card .pill.warn { color: var(--amber); background: var(--amber-bg); }
+
+  /* progress */
+  .progress-block { margin-bottom: 14px; }
+  .progress-block .head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 6px;
+  }
+  .progress-block .name { font-weight: 600; color: var(--navy); font-size: 14px; }
+  .progress-block .pct { font-size: 13px; color: var(--muted); font-weight: 600; }
+  .progress-bar {
+    height: 10px; background: var(--light); border-radius: 999px; overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #1E7F4E, #4EC884);
+    transition: width 1s ease;
+    width: 0;
+  }
+
+  /* callout boxes */
+  .callout {
+    border-radius: 12px;
+    padding: 22px 24px;
+    border: 1px solid var(--border);
+    margin-bottom: 18px;
+    position: relative;
+  }
+  .callout.warn {
+    background: var(--amber-bg);
+    border-color: #F0D58C;
+    border-left: 4px solid var(--amber);
+  }
+  .callout.info {
+    background: #EEF6FF;
+    border-color: #BBD8F5;
+    border-left: 4px solid var(--navy-2);
+  }
+  .callout.green {
+    background: var(--green-bg);
+    border-color: #B6DFC5;
+    border-left: 4px solid var(--green);
+  }
+  .callout h3 { font-size: 17px; color: var(--navy); margin-bottom: 8px; }
+  .callout p  { font-size: 14px; color: #1F2937; }
+
+  /* decision options */
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 22px;
+  }
+  .opt {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    display: flex; flex-direction: column;
+    position: relative;
+  }
+  .opt .letter {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: var(--light);
+    color: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 17px;
+    margin-bottom: 12px;
+  }
+  .opt h4 { font-size: 15px; color: var(--navy); margin-bottom: 8px; }
+  .opt p { font-size: 13.5px; color: var(--slate); margin-bottom: 12px; }
+  .opt .tag {
+    display: inline-block;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+    padding: 3px 9px; border-radius: 999px;
+    background: var(--light); color: var(--slate);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .opt .timing { font-size: 12.5px; color: var(--muted); margin-top: auto; padding-top: 8px; }
+  .opt.recommended {
+    border: 2px solid var(--green);
+    box-shadow: 0 0 0 4px var(--green-bg);
+  }
+  .opt.recommended .letter { background: var(--green); color: white; }
+  .opt.recommended .rec {
+    position: absolute; top: -12px; right: 16px;
+    background: var(--green); color: white;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.7px;
+    padding: 4px 10px; border-radius: 999px;
+    text-transform: uppercase;
+  }
+
+  /* timeline */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before {
+    content: ""; position: absolute; left: 9px; top: 6px; bottom: 6px;
+    width: 2px; background: var(--border);
+  }
+  .tl-item { position: relative; padding-bottom: 22px; }
+  .tl-item::before {
+    content: ""; position: absolute; left: -23px; top: 6px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--navy-2);
+    border: 2px solid white;
+    box-shadow: 0 0 0 2px var(--navy-2);
+  }
+  .tl-item.future::before { background: var(--light); box-shadow: 0 0 0 2px var(--border); }
+  .tl-item h4 { font-size: 15px; color: var(--navy); }
+  .tl-item .when { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 4px; }
+  .tl-item p { font-size: 13.5px; color: var(--slate); margin-top: 4px; }
+
+  /* lista limpia */
+  .clean-list { list-style: none; }
+  .clean-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    color: #1F2937;
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .clean-list li:last-child { border-bottom: none; }
+  .clean-list li::before {
+    content: "✓";
+    color: var(--green);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* demo steps */
+  .demo-steps { counter-reset: step; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .step {
+    background: white; border: 1px solid var(--border); border-radius: 12px;
+    padding: 18px 20px 18px 60px;
+    position: relative;
+    box-shadow: var(--shadow);
+  }
+  .step::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute; left: 18px; top: 18px;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px;
+  }
+  .step h4 { font-size: 14.5px; color: var(--navy); margin-bottom: 4px; }
+  .step p { font-size: 13px; color: var(--slate); }
+  .step .time { font-size: 11px; color: var(--muted); font-weight: 600; }
+
+  /* approvals checklist */
+  .approval {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 18px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .approval:hover { background: #FAFCFE; }
+  .approval .check {
+    width: 26px; height: 26px; border-radius: 6px;
+    border: 2px solid #C9D2DE;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 16px;
+    transition: all 0.15s;
+  }
+  .approval.checked .check {
+    background: var(--green);
+    border-color: var(--green);
+    color: white;
+  }
+  .approval h4 { font-size: 14.5px; color: var(--navy); }
+  .approval p { font-size: 12.5px; color: var(--muted); }
+  .approval.checked h4 { text-decoration: line-through; color: var(--muted); }
+
+  /* footer */
+  footer.foot {
+    border-top: 1px solid var(--border);
+    background: white;
+    padding: 28px 0;
+    text-align: center;
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-top: 40px;
+  }
+  footer.foot b { color: var(--navy); }
+
+  /* utility */
+  .mb-0 { margin-bottom: 0; }
+  .mb-6 { margin-bottom: 6px; }
+  .mt-24 { margin-top: 24px; }
+
+  @media (max-width: 900px) {
+    .kpi-row { grid-template-columns: repeat(2, 1fr); }
+    .grid-2, .grid-3, .options-grid, .demo-steps { grid-template-columns: 1fr; }
+    h1.hero-title { font-size: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="container">
+    <div class="badge"><span class="dot"></span> Sprint 1 cerrado · 92% del plan entregado</div>
+    <div class="eyebrow">Reporte ejecutivo para socios · 15 de mayo 2026</div>
+    <h1 class="hero-title">WhatsApp Asesor–Cliente:<br/>la primera entrega está en verde.</h1>
+    <p class="hero-sub">
+      Cerramos el primer sprint del MVP de Goopcar con la integración WhatsApp asesor-cliente
+      operativa, probada en datos reales y lista para demostración. Hay <b style="color:white">un único
+      bloqueo comercial pendiente</b> que requiere decisión del comité.
+    </p>
+    <div class="meta-row">
+      <div><b>Cliente piloto:</b> Astara Retail</div>
+      <div><b>Líder técnico:</b> Diego Quiroga</div>
+      <div><b>Product Owner:</b> Óscar</div>
+      <div><b>Próximo sprint:</b> Lunes 18 de mayo</div>
+    </div>
+  </div>
+</header>
+
+<!-- KPIs -->
+<div class="kpi-row">
+  <div class="kpi accent">
+    <div class="label">Funcionalidades</div>
+    <div class="value">8<span class="unit"> / 10</span></div>
+    <div class="sub">Cerradas al 100% · 2 listas, esperando destrabe comercial</div>
+  </div>
+  <div class="kpi accent">
+    <div class="label">Esfuerzo entregado</div>
+    <div class="value">92<span class="unit">%</span></div>
+    <div class="sub">36 de 39 puntos comprometidos</div>
+  </div>
+  <div class="kpi accent">
+    <div class="label">Pruebas automáticas</div>
+    <div class="value">90<span class="unit"> / 90</span></div>
+    <div class="sub">Todas pasando · 0 errores</div>
+  </div>
+  <div class="kpi warn">
+    <div class="label">Bloqueos pendientes</div>
+    <div class="value">1</div>
+    <div class="sub">Credenciales productivas (decisión comité)</div>
+  </div>
+</div>
+
+<!-- TABS -->
+<nav class="tabs">
+  <div class="tabs-inner">
+    <button class="tab-btn active" data-tab="resumen">Resumen</button>
+    <button class="tab-btn" data-tab="entregado">Lo entregado</button>
+    <button class="tab-btn" data-tab="calidad">Calidad</button>
+    <button class="tab-btn" data-tab="demo">Demo</button>
+    <button class="tab-btn" data-tab="kam7">Decisión del comité</button>
+    <button class="tab-btn" data-tab="sprint2">Sprint 2</button>
+    <button class="tab-btn" data-tab="aprobacion">Aprobaciones</button>
+  </div>
+</nav>
+
+<main class="container">
+
+  <!-- =================== RESUMEN =================== -->
+  <section class="panel active" id="resumen">
+    <h2 class="section-title">El veredicto en una página</h2>
+    <p class="section-sub">
+      Sprint 1 cierra con la épica completa entregada: el asesor ya puede conversar por WhatsApp con
+      sus clientes desde una bandeja unificada, enviar plantillas pre-aprobadas y recibir respuestas.
+      Todo está corriendo en producción con un modo de demostración seguro mientras se destraba el
+      tema comercial de las credenciales.
+    </p>
+
+    <div class="grid-2 mt-24">
+      <div class="card">
+        <h3 style="color:var(--navy); margin-bottom:10px;">Lo que el asesor ya puede hacer</h3>
+        <ul class="clean-list">
+          <li>Ver toda su bandeja de conversaciones con clientes en un solo lugar.</li>
+          <li>Configurar su número WhatsApp asignado por la sucursal.</li>
+          <li>Enviar plantillas pre-aprobadas (confirmación de cita, recordatorio, listo retiro, NPS).</li>
+          <li>Escribir mensajes libres dentro de la ventana de 24 horas que define Meta/WhatsApp.</li>
+          <li>Ver el estado de cada mensaje en tiempo real (enviado, entregado, leído, fallido).</li>
+          <li>Recibir mensajes entrantes del cliente con notificación de no-leído.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--navy); margin-bottom:10px;">Lo que el gerente ya puede hacer</h3>
+        <ul class="clean-list">
+          <li>Ver el canal WhatsApp asignado a cada asesor de su fuerza de venta.</li>
+          <li>Asignar, modificar o desactivar el número WhatsApp de un asesor.</li>
+          <li>Garantizar que ningún asesor tenga dos números activos a la vez (regla a nivel sistema).</li>
+          <li>Acceder a la bandeja completa con KPIs personales y filtros por estado.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout warn mt-24">
+      <h3>Un único bloqueo: credenciales WhatsApp compartidas con producción ajena</h3>
+      <p>
+        Las credenciales del proveedor (Chattigo) que recibimos del KAM están actualmente en uso por
+        otra solución productiva de los socios. Activarlas tal cual rompería ese flujo. Por eso el
+        sistema corre en <b>modo demostración</b> — funciona idéntico al modo real, pero no envía
+        mensajes hacia números externos hasta destrabar el tema comercial. Necesitamos decisión del
+        comité (ver pestaña <i>Decisión del comité</i>).
+      </p>
+    </div>
+
+    <div class="callout green">
+      <h3>El cambio a producción real es una sola variable</h3>
+      <p>
+        El modo demostración y el modo real son intercambiables sin tocar código. Cuando el comité
+        destrabe el tema KAM, basta cambiar una configuración y el sistema empieza a enviar
+        WhatsApps reales a clientes. No hay riesgo técnico — toda la lógica está probada con datos
+        reales (90 verificaciones automáticas + 16 escenarios en vivo).
+      </p>
+    </div>
+  </section>
+
+  <!-- =================== ENTREGADO =================== -->
+  <section class="panel" id="entregado">
+    <h2 class="section-title">Lo que se entrega</h2>
+    <p class="section-sub">
+      Cada tarjeta es una pieza funcional del producto. Las 10 funcionalidades comprometidas en el
+      plan están entregadas: 8 al 100% sin condiciones, 2 con código completo y pruebas verdes
+      esperando el destrabe comercial para activarse en producción real.
+    </p>
+
+    <div class="grid-3">
+      <div class="feat-card">
+        <span class="pill">Entregada</span>
+        <div class="icon">⚙️</div>
+        <h3>Configuración del canal</h3>
+        <p>Conexión segura con el proveedor WhatsApp lista y verificable con un click ("ping" desde el sistema). Permite al equipo saber en cualquier momento si el canal está sano.</p>
+      </div>
+      <div class="feat-card">
+        <span class="pill warn">Lista — activación diferida</span>
+        <div class="icon">📤</div>
+        <h3>Envío de mensajes</h3>
+        <p>Motor de envío con plantillas y mensajes libres. Maneja errores, reintentos y la sesión de 24h de forma automática. Esperando credenciales sandbox.</p>
+      </div>
+      <div class="feat-card">
+        <span class="pill warn">Lista — activación diferida</span>
+        <div class="icon">📥</div>
+        <h3>Recepción de mensajes</h3>
+        <p>Cuando el cliente responde, el mensaje entra al sistema, se asocia automáticamente al asesor correcto y abre/actualiza la conversación. Listo para activar.</p>
+      </div>
+      <div class="feat-card">
+        <span class="pill">Entregada</span>
+        <div class="icon">🗂️</div>
+        <h3>Memoria de conversaciones</h3>
+        <p>Cada mensaje queda guardado de forma segura, sin duplicaciones, con trazabilidad completa de su estado (enviado, entregado, leído).</p>
+      </div>
+      <div class="feat-card">
+        <span class="pill">Entregada</span>
+        <div class="icon">📱</div>
+        <h3>Canal por asesor</h3>
+        <p>Cada asesor tiene su número WhatsApp asociado. El gerente lo configura desde la vista de asesores. El sistema impide tener dos números activos a la vez.</p>
+      </div>
+      <div class="feat-card">
+        <span class="pill">Entregada</span>
+        <div class="icon">📋</div>
+        <h3>Bandeja del asesor</h3>
+        <p>Lista de conversaciones con búsqueda, filtros, KPIs personales y vistas por rol. Hereda toda la robustez del componente que ya existía y suma WhatsApp.</p>
+      </div>
+      <div class="feat-card">
+        <span class="pill">Entregada</span>
+        <div class="icon">💬</div>
+        <h3>Chat + envío de plantillas</h3>
+        <p>Pantalla de conversación con selector de plantillas, variables editables, preview en vivo, iconos de estado del mensaje y manejo visible de errores. El "WhatsApp del asesor" hecho a medida.</p>
+      </div>
+      <div class="feat-card">
+        <span class="pill">Entregada</span>
+        <div class="icon">📨</div>
+        <h3>5 plantillas pre-aprobadas</h3>
+        <p>Activación postventa día 1, confirmación de cita, recordatorio 24h, auto listo para retiro y encuesta NPS. Sacadas del Plan Scrum y el sheet de borrador de mensajes.</p>
+      </div>
+      <div class="feat-card">
+        <span class="pill">Entregada</span>
+        <div class="icon">✅</div>
+        <h3>Pruebas automatizadas</h3>
+        <p>90 verificaciones automáticas que corren en cada cambio: validan envío, recepción, persistencia, idempotencia y seguridad. 100% en verde.</p>
+      </div>
+      <div class="feat-card">
+        <span class="pill">Entregada</span>
+        <div class="icon">📊</div>
+        <h3>Demo + documentación</h3>
+        <p>Guion de demo para el comité, reporte de cierre, registro de deuda diferida y plan operativo de Sprint 2. Todo en el Drive de Desarrollo Goopcartech.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== CALIDAD =================== -->
+  <section class="panel" id="calidad">
+    <h2 class="section-title">Calidad y robustez</h2>
+    <p class="section-sub">
+      Antes de cerrar Sprint 1 corrimos una pasada completa de pruebas extremo a extremo contra una
+      base de datos real, no simulada. Encontramos 4 bugs durante la pasada y los arreglamos todos
+      en el mismo día.
+    </p>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="color:var(--navy); margin-bottom:14px;">Cobertura de pruebas</h3>
+        <div class="progress-block">
+          <div class="head"><span class="name">Pruebas automatizadas</span><span class="pct">90 / 90</span></div>
+          <div class="progress-bar"><div class="fill" data-pct="100"></div></div>
+        </div>
+        <div class="progress-block">
+          <div class="head"><span class="name">Escenarios en vivo con datos reales</span><span class="pct">16 / 16</span></div>
+          <div class="progress-bar"><div class="fill" data-pct="100"></div></div>
+        </div>
+        <div class="progress-block">
+          <div class="head"><span class="name">Verificación de tipos backend + frontend</span><span class="pct">0 errores</span></div>
+          <div class="progress-bar"><div class="fill" data-pct="100"></div></div>
+        </div>
+        <div class="progress-block">
+          <div class="head"><span class="name">Funcionalidades cerradas completas</span><span class="pct">8 / 10</span></div>
+          <div class="progress-bar"><div class="fill" data-pct="80"></div></div>
+        </div>
+        <div class="progress-block">
+          <div class="head"><span class="name">Esfuerzo planificado entregado</span><span class="pct">92%</span></div>
+          <div class="progress-bar"><div class="fill" data-pct="92"></div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="color:var(--navy); margin-bottom:14px;">Bugs encontrados durante QA — todos arreglados</h3>
+        <ul class="clean-list">
+          <li><b>Crítico</b> · El modo demostración no procesaba bien los mensajes entrantes reales. Resuelto y verificado con curl real.</li>
+          <li><b>Crítico</b> · El modo demostración no validaba autenticación de webhooks (vulnerabilidad). Resuelto: ahora valida tokens igual que el modo real.</li>
+          <li><b>Alto</b> · Al enviar como gerente en nombre de otro asesor, el sistema buscaba el canal equivocado. Resuelto: ahora prioriza al asesor asignado a la conversación.</li>
+          <li><b>Medio</b> · Algunas pantallas legacy no mostraban errores cuando el sistema rechazaba un envío. Resuelto: ahora hay mensaje claro al usuario.</li>
+        </ul>
+        <div class="callout green" style="margin-top:18px; padding:14px 18px;">
+          <h3 style="font-size:14px; margin-bottom:4px;">Ningún bug bloqueante para la demo del comité.</h3>
+          <p style="font-size:13px;">Los 4 hallazgos quedaron resueltos antes del cierre del sprint.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="color:var(--navy); margin:32px 0 14px;">Garantías técnicas que dejamos para producción</h3>
+    <div class="grid-3">
+      <div class="card">
+        <b style="color:var(--navy)">Sin duplicación de mensajes</b>
+        <p style="font-size:13.5px; color:var(--slate); margin-top:6px;">Si el proveedor reenvía un mensaje por reintento, el sistema lo reconoce y no lo duplica.</p>
+      </div>
+      <div class="card">
+        <b style="color:var(--navy)">Migración de base de datos segura</b>
+        <p style="font-size:13.5px; color:var(--slate); margin-top:6px;">El cambio de modelo de datos es aditivo: no afecta lo que ya existe, no requiere downtime.</p>
+      </div>
+      <div class="card">
+        <b style="color:var(--navy)">Multi-cliente listo</b>
+        <p style="font-size:13.5px; color:var(--slate); margin-top:6px;">La arquitectura ya separa datos por cliente. Astara Retail es el primero; podemos sumar más sin retrabajos.</p>
+      </div>
+      <div class="card">
+        <b style="color:var(--navy)">Cambio de proveedor sin reescribir</b>
+        <p style="font-size:13.5px; color:var(--slate); margin-top:6px;">Si en el futuro nos movemos de Chattigo a la API directa de Meta, no hay que cambiar la base de datos ni la lógica del producto.</p>
+      </div>
+      <div class="card">
+        <b style="color:var(--navy)">Ventana 24h gestionada</b>
+        <p style="font-size:13.5px; color:var(--slate); margin-top:6px;">El sistema sabe cuándo expira la sesión con cada cliente y bloquea envíos fuera de la ventana, evitando rechazo de Meta.</p>
+      </div>
+      <div class="card">
+        <b style="color:var(--navy)">Seguridad en webhooks</b>
+        <p style="font-size:13.5px; color:var(--slate); margin-top:6px;">Los endpoints que reciben mensajes validan token en cada request. No se puede inyectar tráfico sin autorización.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== DEMO =================== -->
+  <section class="panel" id="demo">
+    <h2 class="section-title">Qué van a ver en la demo</h2>
+    <p class="section-sub">
+      Grabación tipo Loom de 4–5 minutos, en vivo, sobre el ambiente de producción.
+      El recorrido sigue el camino real del asesor.
+    </p>
+
+    <div class="demo-steps">
+      <div class="step">
+        <div class="time">0:00 – 0:30 · CONTEXTO</div>
+        <h4>Setup y modo de operación</h4>
+        <p>Mostramos que el sistema corre en modo demostración seguro. Funcionalmente idéntico al modo real.</p>
+      </div>
+      <div class="step">
+        <div class="time">0:30 – 1:00 · SALUD</div>
+        <h4>Health check del canal</h4>
+        <p>Endpoint que reporta si el canal WhatsApp está sano. Útil para soporte y monitoreo.</p>
+      </div>
+      <div class="step">
+        <div class="time">1:00 – 2:00 · CONFIGURACIÓN</div>
+        <h4>Asignar número al asesor</h4>
+        <p>El gerente entra a la vista de asesores, ve la columna "Canal WhatsApp", abre el drawer y asigna un número.</p>
+      </div>
+      <div class="step">
+        <div class="time">2:00 – 3:30 · CONVERSACIÓN</div>
+        <h4>Enviar plantilla + texto libre</h4>
+        <p>El asesor abre una conversación, selecciona la plantilla "confirmación de cita", llena las variables, ve preview y envía. Luego escribe un mensaje libre.</p>
+      </div>
+      <div class="step">
+        <div class="time">3:30 – 4:30 · RECEPCIÓN</div>
+        <h4>Cliente responde</h4>
+        <p>Simulamos respuesta entrante del cliente: aparece en la bandeja con badge "no leído" y la sesión 24h se renueva.</p>
+      </div>
+      <div class="step">
+        <div class="time">4:30 – 5:00 · CIERRE</div>
+        <h4>Resumen y próximos pasos</h4>
+        <p>El sistema completo funciona. El switch a WhatsApp real es una sola configuración cuando se destrabe lo comercial.</p>
+      </div>
+    </div>
+
+    <div class="callout info mt-24">
+      <h3>Cómo se va a distribuir</h3>
+      <p>
+        Grabación 720p subida a la carpeta <b>Desarrollo Goopcartech</b> en Drive y compartida al grupo
+        WhatsApp del mismo nombre, en formato Loom para que cada socio la pueda ver cuando quiera y
+        dejar comentarios timestamp por timestamp.
+      </p>
+    </div>
+  </section>
+
+  <!-- =================== KAM7 =================== -->
+  <section class="panel" id="kam7">
+    <h2 class="section-title">Decisión que necesitamos del comité</h2>
+    <p class="section-sub">
+      Las credenciales WhatsApp del proveedor (Chattigo) que recibimos del KAM están atadas a otra
+      solución productiva de los socios. Si las activamos tal cual, mezclaríamos mensajes con esa
+      otra solución y romperíamos su flujo. Sprint 1 ya está cerrado y la demo funciona en modo
+      demostración. Para pasar a uso comercial real con clientes de Astara, necesitamos elegir un
+      camino.
+    </p>
+
+    <div class="options-grid">
+      <div class="opt recommended">
+        <span class="rec">Recomendada</span>
+        <div class="letter">A</div>
+        <span class="tag">Activable en horas</span>
+        <h4>KAM provee credenciales sandbox separadas</h4>
+        <p>El partner nos da credenciales independientes para el MVP. No interfiere con su solución productiva. Es la vía más rápida para empezar a generar revenue real con Astara.</p>
+        <div class="timing"><b>Plazo:</b> Horas tras la decisión</div>
+      </div>
+      <div class="opt">
+        <div class="letter">B</div>
+        <span class="tag">Plazo: semanas</span>
+        <h4>Goopcar tramita su propio número Meta-verified</h4>
+        <p>Independencia total del partner: número propio, registrado en Meta. Mayor control a largo plazo, pero el trámite tiene plazos y costos.</p>
+        <div class="timing"><b>Plazo:</b> 3–6 semanas</div>
+      </div>
+      <div class="opt">
+        <div class="letter">C</div>
+        <span class="tag">Sin destrabe</span>
+        <h4>Sprint 2 sigue en modo demostración</h4>
+        <p>Postergar la activación productiva hasta Sprint 3. Funcionalmente todo sigue avanzando, pero no se generan mensajes WhatsApp reales con clientes finales hasta entonces.</p>
+        <div class="timing"><b>Plazo:</b> Diferido a Sprint 3</div>
+      </div>
+    </div>
+
+    <div class="callout info mt-24">
+      <h3>¿Por qué la recomendación es la opción A?</h3>
+      <p>
+        Es la única que destraba revenue real para el cliente piloto en el corto plazo, sin
+        comprometer la solución existente del partner ni asumir el costo y plazo de un trámite Meta
+        propio. La opción B tiene sentido como camino de mediano plazo en paralelo, pero no es
+        bloqueante. La opción C es el "no hacer nada" — el riesgo es que Sprint 2 también entregue
+        sólo demo, retrasando el valor para el negocio.
+      </p>
+    </div>
+
+    <div class="callout warn">
+      <h3>Consideración técnica adicional</h3>
+      <p>
+        Si en algún momento decidimos compartir la cuenta Chattigo con la otra solución de los
+        socios, hay que coordinar el cambio de la URL de webhook con el equipo dueño de esa solución
+        antes de activar — de lo contrario, romperíamos el inbound del producto vecino.
+      </p>
+    </div>
+  </section>
+
+  <!-- =================== SPRINT 2 =================== -->
+  <section class="panel" id="sprint2">
+    <h2 class="section-title">Lo que viene en Sprint 2</h2>
+    <p class="section-sub">
+      Arranca el lunes 18 de mayo. La épica del próximo sprint es el <b>motor automático de
+      journey postventa</b>: que el sistema mande mensajes solo cuando corresponde, sin que el
+      asesor tenga que acordarse.
+    </p>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="when">Lun 18 may · Día 1</div>
+        <h4>Kickoff Sprint 2 con PO</h4>
+        <p>Confirmación de scope y arranque formal. 09:00 hrs.</p>
+      </div>
+      <div class="tl-item future">
+        <div class="when">Días 2–4 · Motor de citas</div>
+        <h4>Estados de la cita + recordatorios automáticos</h4>
+        <p>El sistema sabe en qué estado está cada cita (agendada, confirmada, ejecutada, no-show) y dispara recordatorios 24h antes sin intervención del asesor.</p>
+      </div>
+      <div class="tl-item future">
+        <div class="when">Días 5–6 · Listo para retiro</div>
+        <h4>Notificación de auto listo</h4>
+        <p>Cuando el taller marca el auto como listo, el cliente recibe automáticamente la plantilla "Tu auto está listo para retirar".</p>
+      </div>
+      <div class="tl-item future">
+        <div class="when">Días 7–8 · NPS post-entrega</div>
+        <h4>Encuesta de satisfacción automática</h4>
+        <p>Tras la entrega, el cliente recibe encuesta NPS por WhatsApp. El sistema captura su respuesta y la registra contra el asesor + sucursal.</p>
+      </div>
+      <div class="tl-item future">
+        <div class="when">Días 9 · Dashboard</div>
+        <h4>Métricas para gerentes</h4>
+        <p>Panel mínimo con mensajes enviados, entregados, leídos y tasa de respuesta. Visión por sucursal y por asesor.</p>
+      </div>
+      <div class="tl-item future">
+        <div class="when">Día 10 · Demo formal</div>
+        <h4>Presentación a Astara Retail</h4>
+        <p>Demo en vivo del motor automático funcionando con datos reales del piloto.</p>
+      </div>
+    </div>
+
+    <div class="callout info mt-24">
+      <h3>En paralelo, fuera del scope de ingeniería</h3>
+      <p>
+        Resolver el tema KAM 7 (credenciales productivas) para que Sprint 2 cierre con WhatsApp real
+        hacia clientes finales y no solo en modo demostración.
+      </p>
+    </div>
+  </section>
+
+  <!-- =================== APROBACIONES =================== -->
+  <section class="panel" id="aprobacion">
+    <h2 class="section-title">Aprobaciones requeridas</h2>
+    <p class="section-sub">
+      Para considerar Sprint 1 formalmente entregado y desbloquear el arranque de Sprint 2.
+      Pueden ir marcando cada ítem a medida que lo revisan.
+    </p>
+
+    <div class="approval" onclick="this.classList.toggle('checked')">
+      <div class="check">✓</div>
+      <div>
+        <h4>Aceptación funcional del cierre</h4>
+        <p>Basada en la grabación demo + recorrido visual del entorno. <b>Responsable:</b> Product Owner.</p>
+      </div>
+    </div>
+    <div class="approval" onclick="this.classList.toggle('checked')">
+      <div class="check">✓</div>
+      <div>
+        <h4>Decisión sobre credenciales WhatsApp (opción A, B o C)</h4>
+        <p>Define cómo se destraba o difiere la activación productiva. <b>Responsable:</b> Comité comercial.</p>
+      </div>
+    </div>
+    <div class="approval" onclick="this.classList.toggle('checked')">
+      <div class="check">✓</div>
+      <div>
+        <h4>Confirmación del scope de Sprint 2</h4>
+        <p>Kickoff lunes 18 de mayo, 09:00. <b>Responsable:</b> Product Owner + líder técnico.</p>
+      </div>
+    </div>
+
+    <div class="callout green mt-24">
+      <h3>Documentación de respaldo disponible en Drive</h3>
+      <p>
+        Reporte de cierre técnico, reporte de QA con datos reales, registro de deuda diferida con
+        justificación, guion de demo y plan operativo de Sprint 2. Todo en la carpeta
+        <b>Desarrollo Goopcartech</b>.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="container">
+    <b>Confidencial · Goopcar / Cognitiva SpA</b> &middot; Reporte preparado por el líder técnico
+    &middot; 15 de mayo de 2026
+  </div>
+</footer>
+
+<script>
+  // Tabs
+  const tabs = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+  tabs.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tab = btn.dataset.tab;
+      tabs.forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+      panels.forEach(p => p.classList.toggle('active', p.id === tab));
+      // animate progress bars when calidad panel opens
+      if (tab === 'calidad') animateProgress();
+      // scroll to top of content
+      window.scrollTo({ top: document.querySelector('nav.tabs').offsetTop, behavior: 'smooth' });
+    });
+  });
+
+  // Animate progress bars
+  function animateProgress() {
+    document.querySelectorAll('.progress-bar .fill').forEach(bar => {
+      const pct = bar.dataset.pct;
+      bar.style.width = '0%';
+      requestAnimationFrame(() => {
+        bar.style.width = pct + '%';
+      });
+    });
+  }
+</script>
+
+</body>
+</html>
